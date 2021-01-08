@@ -26,8 +26,9 @@ commandHandler :: String -> CommandTable -> ResponseFunc
 commandHandler prefix tabel message = do
     command <- parseCommand prefix message
     func <- Map.lookup (name command) tabel
-    result <- func (author message) (args command)
-    return result
+    return $ case func (author message) (args command) of
+                  Just res -> res
+                  Nothing  -> "command error"
 
 read' :: Read a => String -> Maybe a
 read' x = case reads x of

@@ -14,10 +14,9 @@ myName :: CommandFunc
 myName author _ = Just $ "You are " ++ author ++ ", and that is a lovely name :D"
 
 addNumbers :: CommandFunc
-addNumbers _ (x:y:_) = do
-    x' <- read' x :: Maybe Int
-    y' <- read' y :: Maybe Int
-    return . show $ x' + y'
+addNumbers _ xs = do
+    nums <- mapM read' xs
+    return . show $ sum nums
 
 commands = fromList [ ("test", test)
                     , ("name", myName)
