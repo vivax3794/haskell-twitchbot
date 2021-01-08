@@ -8,13 +8,20 @@ import System.IO
 
 
 test :: CommandFunc
-test _ _ = "I am working"
+test _ _ = Just "I am working"
 
 myName :: CommandFunc
-myName author _ = "You are " ++ author ++ ", and that is a lovely name :D"
+myName author _ = Just $ "You are " ++ author ++ ", and that is a lovely name :D"
+
+addNumbers :: CommandFunc
+addNumbers _ (x:y:_) = do
+    x' <- read' x :: Maybe Int
+    y' <- read' y :: Maybe Int
+    return . show $ x' + y'
 
 commands = fromList [ ("test", test)
-                    , ("name", myName)]
+                    , ("name", myName)
+                    , ("add", addNumbers)]
 
 prefix :: String
 prefix = "!"

@@ -2,7 +2,8 @@ module Commands ( CommandFunc
                 , CommandTable
                 , fromList
                 , combine
-                , commandHandler) where
+                , commandHandler
+                , read') where
 
 
 import Types
@@ -12,7 +13,7 @@ import Parsing
 import qualified Data.Map.Strict as Map
 
 
-type CommandFunc  = User -> [String] -> String
+type CommandFunc  = User -> [String] -> Maybe String
 type CommandTable = Map.Map String CommandFunc
 
 fromList :: [(String, CommandFunc)] -> CommandTable
@@ -25,4 +26,10 @@ commandHandler :: String -> CommandTable -> ResponseFunc
 commandHandler prefix tabel message = do
     command <- parseCommand prefix message
     func <- Map.lookup (name command) tabel
-    return $ func (author message) (args command)
+    result <- func (author message) (args command)
+    return result
+
+read' :: Read a => String -> Maybe a
+read' x = case reads x of
+              [(res, _)] -> Just res
+              _          -> Nothing
