@@ -32,5 +32,5 @@ commandHandler prefix tabel message = do
 
 read' :: Read a => String -> Maybe a
 read' x = case reads x of
-              [(res, _)] -> Just res
+              [(res, "")] -> Just res
               _          -> Nothing

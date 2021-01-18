@@ -18,7 +18,7 @@ extra-source-files:  CHANGELOG.md
 
 executable twitchbot
   main-is:             Main.hs
-  other-modules: Core Formating Parsing Types Commands
+  other-modules: Core Formating Parsing Types Commands Math
   -- other-extensions:
   build-depends:       base >=4.13 && <4.14, network >= 3.1.2.1, bytestring, containers
   hs-source-dirs:      src-exe

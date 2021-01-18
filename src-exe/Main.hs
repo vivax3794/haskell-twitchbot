@@ -3,6 +3,7 @@ module Main where
 import Core
 import Types
 import Commands
+import Math
 
 import System.IO
 
@@ -10,7 +11,7 @@ prefix :: String
 prefix = "!"
 
 targetChannel :: Channel
-targetChannel = "vivax3794"
+targetChannel = "arcticspacefox"
 
 test :: CommandFunc
 test _ _ = Just "I am working"
@@ -29,10 +30,19 @@ fac _ (x:_) = do
     else Just $ show . foldl (*) 1 $ [1..x']
 fac _ _ = Just "missing argument"
 
+math :: CommandFunc
+math _ xs = show <$> (eval =<< mapM parseWord xs)
+
+best _ _ = Just $ "the best twitch streamer is of course " ++ targetChannel ++ "! there is NOBODY else better than them!"
+
 commands = fromList [ ("test", test)
                     , ("name", myName)
                     , ("add", addNumbers)
-                    , ("fac", fac)]
+                    , ("fac", fac)
+                    , ("best", best)
+                    , ("math", math)]
+
+
 
 
 main :: IO ()
@@ -44,9 +54,9 @@ main = do
     sock <- connectToTwitch theRealVivax
     hClose tokenFile
 
-    -- connect to upjump
+    -- connect to targetChannel
     connectToChannel sock targetChannel
-    sendMessage sock targetChannel "I am online"
+    sendMessage sock targetChannel "I am online (and i am a bot)"
 
     -- start processing commands
     eventLoop sock $ commandHandler prefix commands
